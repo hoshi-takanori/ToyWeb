@@ -7,7 +7,22 @@ import java.util.Set;
  */
 public interface Request {
 	/**
-	 * Returns the method name, for example, "HEAD", "GET", or "POST".
+	 * HTTP HEAD method.
+	 */
+	public static final String METHOD_HEAD = "HEAD";
+
+	/**
+	 * HTTP GET method.
+	 */
+	public static final String METHOD_GET = "GET";
+
+	/**
+	 * HTTP POST method.
+	 */
+	public static final String METHOD_POST = "POST";
+
+	/**
+	 * Returns the method name, for example, Request.METHOD_GET.
 	 * @return the method name
 	 */
 	public String getMethod();
