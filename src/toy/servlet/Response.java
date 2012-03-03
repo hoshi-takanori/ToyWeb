@@ -2,7 +2,8 @@ package toy.servlet;
 
 /**
  * Defines an object to assist a servlet in sending a response to the client.
- * The servlet container creates a Response object and passes it as an argument to the servletÅfs service method.
+ * The servlet container creates a Response object and passes it as an argument
+ * to the servletÅfs service method.
  */
 public interface Response {
 	/**
@@ -11,10 +12,12 @@ public interface Response {
 	public static final String STATUS_OK = "200 OK";
 
 	/**
-	 * The requested resource resides temporarily under a different URI.
-	 * The temporary URI SHOULD be given by the Location field in the response.
+	 * The response to the request can be found under a different URI and
+	 * SHOULD be retrieved using a GET method on that resource.
+	 * If the new URI is a location, its URL SHOULD be given by the Location
+	 * field in the response.
 	 */
-	public static final String STATUS_REDIRECT = "307 Temporary Redirect";
+	public static final String STATUS_REDIRECT = "303 See Other";
 
 	/**
 	 * The request could not be understood by the server due to malformed syntax.
@@ -27,8 +30,10 @@ public interface Response {
 	public static final String STATUS_NOT_FOUND = "404 Not Found";
 
 	/**
-	 * The server encountered an unexpected condition which prevented it from fulfilling the request.
-	 * The servlet container returns this response if the status is not set or the servlet throws an exception.
+	 * The server encountered an unexpected condition which prevented it
+	 * from fulfilling the request.
+	 * The servlet container returns this response if the status is not set
+	 * or the servlet throws an exception.
 	 */
 	public static final String STATUS_ERROR = "500 Internal Server Error";
 
