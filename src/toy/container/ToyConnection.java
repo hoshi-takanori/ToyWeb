@@ -83,6 +83,7 @@ public class ToyConnection implements Runnable {
 	 */
 	@Override
 	public void run() {
+		boolean shutdown = false;
 		try {
 			Request request = getRequest();
 			ToyResponse response = new ToyResponse();
@@ -98,6 +99,10 @@ public class ToyConnection implements Runnable {
 					}
 				}
 			}
+			if (response.getStatus().equals(ToyResponse.STATUS_SHUTDOWN)) {
+				shutdown = true;
+				response.setStatus(Response.STATUS_OK);
+			}
 			PrintStream stream = new PrintStream(socket.getOutputStream(), false, "UTF-8");
 			response.writeTo(stream, request.getMethod().equals(Request.METHOD_HEAD));
 		} catch (IOException e) {
@@ -108,6 +113,9 @@ public class ToyConnection implements Runnable {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+		}
+		if (shutdown) {
+			System.exit(0);
 		}
 	}
 }

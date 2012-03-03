@@ -4,9 +4,11 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import toy.example.AdminServlet;
 import toy.example.HelloServlet;
 import toy.servlet.Request;
 import toy.servlet.Servlet;
@@ -44,8 +46,17 @@ public class ToyContainer {
 				}
 			}
 		} else {
+			servlets.put("^/admin$", new AdminServlet());
 			servlets.put("^/hello$", new HelloServlet());
 		}
+	}
+
+	/**
+	 * Returns a collection of all servlets.
+	 * @return a collection of all servlets
+	 */
+	public static Collection<Servlet> getServlets() {
+		return servlets.values();
 	}
 
 	/**

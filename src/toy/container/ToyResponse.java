@@ -12,6 +12,11 @@ import toy.servlet.Response;
  */
 public class ToyResponse implements Response {
 	/**
+	 * The special status code to shutdown the servlet container.
+	 */
+	public static final String STATUS_SHUTDOWN = "XXX Shutdown";
+
+	/**
 	 * The response status.
 	 */
 	private String status;
@@ -38,6 +43,14 @@ public class ToyResponse implements Response {
 		status = Response.STATUS_ERROR;
 		headers = new HashMap<String, String>();
 		buffer = new StringBuilder();
+	}
+
+	/**
+	 * Returns the response status.
+	 * @return the response status
+	 */
+	public String getStatus() {
+		return status;
 	}
 
 	/**
