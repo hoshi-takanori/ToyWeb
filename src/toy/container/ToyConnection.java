@@ -88,18 +88,20 @@ public class ToyConnection implements Runnable {
 			Request request = getRequest();
 			ToyResponse response = new ToyResponse();
 			if (request == null) {
-				response.setStatus(Response.STATUS_BAD_REQUEST);
+				response.setError(Response.STATUS_BAD_REQUEST, null);
 			} else {
 				Servlet servlet = ToyContainer.findServlet(request);
 				if (servlet != null) {
 					try {
 						servlet.service(request, response);
 					} catch (Exception e) {
-						response.setStatus(Response.STATUS_ERROR);
+						response.setError(Response.STATUS_ERROR, e);
 					}
 				}
 			}
-			if (response.getStatus().equals(ToyResponse.STATUS_SHUTDOWN)) {
+			if (response.getStatus() == null) {
+				response.setError(Response.STATUS_ERROR, null);
+			} else if (response.getStatus().equals(ToyResponse.STATUS_SHUTDOWN)) {
 				shutdown = true;
 				response.setStatus(Response.STATUS_OK);
 			}

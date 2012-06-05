@@ -2,6 +2,8 @@ package toy.container;
 
 import java.io.IOException;
 import java.io.PrintStream;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -40,7 +42,6 @@ public class ToyResponse implements Response {
 	 * Construct a ToyResponse object.
 	 */
 	public ToyResponse() {
-		status = Response.STATUS_ERROR;
 		headers = new HashMap<String, String>();
 		buffer = new StringBuilder();
 	}
@@ -59,6 +60,31 @@ public class ToyResponse implements Response {
 	@Override
 	public void setStatus(String status) {
 		this.status = status;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void setError(String status, Exception exception) {
+		this.status = status;
+		headers.clear();
+		buffer.delete(0, buffer.length());
+		bytes = null;
+
+		setHeader("Content-Type", "text/html");
+		println("<html><head>");
+		println("<title>" + status + "</title>");
+		println("</head><body>");
+		println("<h1>" + status + "</h1>");
+		if (exception == null) {
+			println("<p>An unknown error has occurred.</p>");
+		} else {
+			StringWriter writer = new StringWriter();
+			exception.printStackTrace(new PrintWriter(writer));
+			println("<pre>" + writer + "</pre>");
+		}
+		println("</body></html>");
 	}
 
 	/**

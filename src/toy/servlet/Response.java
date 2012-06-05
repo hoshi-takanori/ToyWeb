@@ -3,7 +3,7 @@ package toy.servlet;
 /**
  * Defines an object to assist a servlet in sending a response to the client.
  * The servlet container creates a Response object and passes it as an argument
- * to the servletÅfs service method.
+ * to the servlet's service method.
  */
 public interface Response {
 	/**
@@ -42,6 +42,14 @@ public interface Response {
 	 * @param status the response status
 	 */
 	public void setStatus(String status);
+
+	/**
+	 * Sets the error status, for example, Response.STATUS_ERROR.
+	 * It also sets the error message as the response body.
+	 * @param status the response status
+	 * @param exception the exception or null
+	 */
+	public void setError(String status, Exception exception);
 
 	/**
 	 * Sets a response header with the given name and value.
