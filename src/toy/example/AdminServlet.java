@@ -38,7 +38,7 @@ public class AdminServlet implements Servlet {
 		} else {
 			response.println("<p>Servlets are:</p>");
 			response.println("<ul>");
-			for (Servlet servlet : ToyContainer.getServlets()) {
+			for (Servlet servlet : ToyContainer.getInstance().getServlets()) {
 				response.println("<li>" + servlet.getName());
 			}
 			response.println("</ul>");

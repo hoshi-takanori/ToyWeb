@@ -1,15 +1,12 @@
 package toy.container;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
+import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import toy.example.AdminServlet;
-import toy.example.HelloServlet;
 import toy.servlet.Request;
 import toy.servlet.Servlet;
 
@@ -23,39 +20,47 @@ public class ToyContainer {
 	public static final int PORT = 8080;
 
 	/**
-	 * The map of the path patterns and servlets.
+	 * The singleton instance of the toy container.
 	 */
-	private static Map<String, Servlet> servlets;
+	private static ToyContainer container;
 
 	/**
-	 * Initialize the servlets map.
-	 * @param filename
-	 * @throws Exception
+	 * The map of the path patterns and servlets.
 	 */
-	public static void initServlets(String filename) throws Exception {
-		servlets = new LinkedHashMap<String, Servlet>();
-		if (filename != null) {
-			BufferedReader reader = new BufferedReader(new FileReader(filename));
-			String line;
-			while ((line = reader.readLine()) != null) {
-				if (line.length() > 0 && line.charAt(0) != '#') {
-					String[] array = line.split("\t+");
-					if (array.length >= 2) {
-						servlets.put(array[0], (Servlet) Class.forName(array[1]).newInstance());
-					}
-				}
-			}
-		} else {
-			servlets.put("^/admin$", new AdminServlet());
-			servlets.put("^/hello$", new HelloServlet());
+	private Map<String, Servlet> servlets;
+
+	/**
+	 * Returns the singleton instance.
+	 * @return the singleton instance
+	 */
+	public static ToyContainer getInstance() {
+		if (container == null) {
+			container = new ToyContainer();
 		}
+		return container;
+	}
+
+	/**
+	 * Constructs a toy container.
+	 */
+	private ToyContainer() {
+		servlets = new LinkedHashMap<String, Servlet>();
+	}
+
+	/**
+	 * Adds a servlet to the servlets map.
+	 * @param pattern the pattern
+	 * @param servlet the servlet
+	 */
+	public void addServlet(String pattern, Servlet servlet) {
+		servlets.put(pattern, servlet);
 	}
 
 	/**
 	 * Returns a collection of all servlets.
 	 * @return a collection of all servlets
 	 */
-	public static Collection<Servlet> getServlets() {
+	public Collection<Servlet> getServlets() {
 		return servlets.values();
 	}
 
@@ -64,7 +69,7 @@ public class ToyContainer {
 	 * @param request the request
 	 * @return the servlet
 	 */
-	public static Servlet findServlet(Request request) {
+	public Servlet findServlet(Request request) {
 		for (String pattern : servlets.keySet()) {
 			if (request.getPath().matches(pattern)) {
 				return servlets.get(pattern);
@@ -77,17 +82,15 @@ public class ToyContainer {
 	 * Starts the toy container.
 	 * @param args the command line arguments
 	 */
-	public static void main(String[] args) {
+	public void start() {
 		try {
-			initServlets(args.length > 0 ? args[0] : null);
-
 			ServerSocket listener = new ServerSocket(PORT);
 			while (true) {
 				Socket socket = listener.accept();
 				ToyConnection connection = new ToyConnection(socket);
 				new Thread(connection).start();
 			}
-		} catch (Exception e) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}

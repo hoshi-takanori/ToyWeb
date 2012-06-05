@@ -90,7 +90,7 @@ public class ToyConnection implements Runnable {
 			if (request == null) {
 				response.setError(Response.STATUS_BAD_REQUEST, null);
 			} else {
-				Servlet servlet = ToyContainer.findServlet(request);
+				Servlet servlet = ToyContainer.getInstance().findServlet(request);
 				if (servlet != null) {
 					try {
 						servlet.service(request, response);
