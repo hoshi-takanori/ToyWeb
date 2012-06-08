@@ -88,7 +88,7 @@ public class ToyConnection implements Runnable {
 			Request request = getRequest();
 			ToyResponse response = new ToyResponse();
 			if (request == null) {
-				response.setError(Response.STATUS_BAD_REQUEST, null);
+				response.setError(Response.STATUS_BAD_REQUEST, "request == null");
 			} else {
 				Servlet servlet = ToyContainer.getInstance().findServlet(request);
 				if (servlet != null) {
@@ -100,7 +100,7 @@ public class ToyConnection implements Runnable {
 				}
 			}
 			if (response.getStatus() == null) {
-				response.setError(Response.STATUS_ERROR, null);
+				response.setError(Response.STATUS_ERROR, "response status == null");
 			} else if (response.getStatus().equals(ToyResponse.STATUS_SHUTDOWN)) {
 				shutdown = true;
 				response.setStatus(Response.STATUS_OK);

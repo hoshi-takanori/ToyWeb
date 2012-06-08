@@ -1,5 +1,7 @@
 package toy.container;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -106,6 +108,28 @@ public class ToyRequest implements Request {
 	 * {@inheritDoc}
 	 */
 	@Override
+	public String getDecodedParameter(String name) {
+		try {
+			String value = getParameter(name);
+			return value != null ? URLDecoder.decode(value, "UTF-8") : null;
+		} catch (UnsupportedEncodingException e) {
+			return null;
+		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int getIntParameter(String name) {
+		String value = getParameter(name);
+		return Integer.parseInt(value);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public Set<String> getHeaderNames() {
 		return headers.keySet();
 	}
@@ -124,6 +148,6 @@ public class ToyRequest implements Request {
 	@Override
 	public int getIntHeader(String name) {
 		String value = getHeader(name);
-		return (value != null) ? Integer.parseInt(value) : -1;
+		return Integer.parseInt(value);
 	}
 }

@@ -49,6 +49,22 @@ public interface Request {
 	public String getParameter(String name);
 
 	/**
+	 * Returns the URL-decoded parameter value specified by name.
+	 * @param name the name to specify the parameter (case sensitive)
+	 * @return the URL-decoded parameter value, or null if there's no parameter specified by name
+	 */
+	public String getDecodedParameter(String name);
+
+	/**
+	 * Returns the parameter value specified by name as an int.
+	 * @param name the name to specify the parameter (case sensitive)
+	 * @return the parameter value as an int
+	 * @throws NullPointerException if there's no parameter specified by name
+	 * @throws NumberFormatException if the parameter value can't be converted to an int
+	 */
+	public int getIntParameter(String name);
+
+	/**
 	 * Returns a set of all header names.
 	 * Note that the header names are converted to lower case.
 	 * @return a set of all header names
@@ -63,9 +79,10 @@ public interface Request {
 	public String getHeader(String name);
 
 	/**
-	 * Returns the header value specified by name, as an int.
+	 * Returns the header value specified by name as an int.
 	 * @param name the name to specify the header (case insensitive)
-	 * @return the header value as an int, or -1 if there's no header specified by name
+	 * @return the header value as an int
+	 * @throws NullPointerException if there's no header specified by name
 	 * @throws NumberFormatException if the header value can't be converted to an int
 	 */
 	public int getIntHeader(String name);

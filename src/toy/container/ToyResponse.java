@@ -66,7 +66,7 @@ public class ToyResponse implements Response {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void setError(String status, Exception exception) {
+	public void setError(String status, String message) {
 		this.status = status;
 		headers.clear();
 		buffer.delete(0, buffer.length());
@@ -77,14 +77,22 @@ public class ToyResponse implements Response {
 		println("<title>" + status + "</title>");
 		println("</head><body>");
 		println("<h1>" + status + "</h1>");
+		println("<pre>" + message + "</pre>");
+		println("</body></html>");
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void setError(String status, Exception exception) {
 		if (exception == null) {
-			println("<p>An unknown error has occurred.</p>");
+			setError(status, "An unknown error has occurred.");
 		} else {
 			StringWriter writer = new StringWriter();
 			exception.printStackTrace(new PrintWriter(writer));
-			println("<pre>" + writer + "</pre>");
+			setError(status, writer.toString());
 		}
-		println("</body></html>");
 	}
 
 	/**

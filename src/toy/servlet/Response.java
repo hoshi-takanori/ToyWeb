@@ -47,6 +47,14 @@ public interface Response {
 	 * Sets the error status, for example, Response.STATUS_ERROR.
 	 * It also sets the error message as the response body.
 	 * @param status the response status
+	 * @param message the error message
+	 */
+	public void setError(String status, String message);
+
+	/**
+	 * Sets the error status, for example, Response.STATUS_ERROR.
+	 * It also sets the error message according to the exception.
+	 * @param status the response status
 	 * @param exception the exception or null
 	 */
 	public void setError(String status, Exception exception);
