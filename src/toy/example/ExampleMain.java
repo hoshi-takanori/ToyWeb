@@ -12,8 +12,8 @@ public class ExampleMain {
 	 */
 	public static void main(String[] args) {
 		ToyContainer container = ToyContainer.getInstance();
-		container.addServlet("^/hello$", new HelloServlet());
-		container.addServlet("^/.*$", new AdminServlet());
+		container.addServlet("/", new AdminServlet());
+		container.addServlet("/hello", new HelloServlet());
 		container.start();
 	}
 }

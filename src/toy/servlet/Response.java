@@ -44,6 +44,13 @@ public interface Response {
 	public void setStatus(String status);
 
 	/**
+	 * Sets the response status to Response.STATUS_REDIRECT and sets
+	 * the "Location" header with the specified redirect location URL.
+	 * @param location the redirect location URL
+	 */
+	public void setRedirect(String location);
+
+	/**
 	 * Sets the error status, for example, Response.STATUS_ERROR.
 	 * It also sets the error message as the response body.
 	 * @param status the response status

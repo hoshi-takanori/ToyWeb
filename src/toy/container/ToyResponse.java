@@ -65,6 +65,14 @@ public class ToyResponse implements Response {
 	/**
 	 * {@inheritDoc}
 	 */
+	public void setRedirect(String location) {
+		status = STATUS_REDIRECT;
+		setHeader("Location", location);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void setError(String status, String message) {
 		this.status = status;
