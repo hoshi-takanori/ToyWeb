@@ -14,6 +14,7 @@ public class ExampleMain {
 		ToyContainer container = ToyContainer.getInstance();
 		container.addServlet("/", new AdminServlet());
 		container.addServlet("/hello", new HelloServlet());
+		container.addServlet("/files/.*", new FileServlet());
 		container.start();
 	}
 }
