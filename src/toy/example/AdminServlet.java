@@ -1,5 +1,8 @@
 package toy.example;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+
 import toy.container.ToyContainer;
 import toy.container.ToyResponse;
 import toy.servlet.Request;
@@ -19,6 +22,26 @@ public class AdminServlet implements Servlet {
 	}
 
 	/**
+	 * Returns the default path of the servlet.
+	 * @param servlet the servlet
+	 * @return the default path, or null if not found
+	 */
+	public String getServletPath(Servlet servlet) {
+		Class<? extends Servlet> cls = servlet.getClass();
+		try {
+			Method method = cls.getMethod("getDefaultPath");
+			return (String) method.invoke(servlet);
+		} catch (Exception e) {
+		}
+		try {
+			Field field = cls.getField("PATH");
+			return (String) field.get(null);
+		} catch (Exception e) {
+		}
+		return null;
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	@Override
@@ -35,7 +58,12 @@ public class AdminServlet implements Servlet {
 			view.printTag("p", "Servlets are:");
 			view.printOpenTag("ul");
 			for (Servlet servlet : ToyContainer.getInstance().getServlets()) {
-				view.printTag("li", servlet.getName());
+				String path = getServletPath(servlet);
+				if (path != null) {
+					view.printTag("li", view.linkTag(servlet.getName(), path));
+				} else {
+					view.printTag("li", servlet.getName());
+				}
 			}
 			view.printCloseTag("ul");
 			view.printOpenTag("form", "method", "POST");

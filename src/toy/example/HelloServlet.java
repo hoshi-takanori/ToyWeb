@@ -9,6 +9,11 @@ import toy.servlet.Servlet;
  */
 public class HelloServlet implements Servlet {
 	/**
+	 * The servlet path.
+	 */
+	public static final String PATH = "/hello";
+
+	/**
 	 * {@inheritDoc}
 	 */
 	@Override
@@ -21,17 +26,36 @@ public class HelloServlet implements Servlet {
 	 */
 	@Override
 	public void service(Request request, Response response) {
-		response.setStatus(Response.STATUS_OK);
-		response.setHeader("Content-Type", "text/plain");
-		response.println("Hello, World.");
-		response.println();
-		response.println("method = " + request.getMethod());
+		BasicView view = new BasicView(response);
+		view.printHead("Hello, World!");
+		view.printOpenTag("p");
+		response.println("method = " + request.getMethod() + view.openTag("br"));
 		response.println("path = " + request.getPath());
-		for (String name : request.getParameterNames()) {
-			response.println("param[" + name + "] = " + request.getParameter(name));
+		view.printCloseTag("p");
+		if (! request.getParameterNames().isEmpty()) {
+			view.printTag("p", "Parameters are:");
+			view.printOpenTag("ul");
+			for (String name : request.getParameterNames()) {
+				view.printTag("li", name + " = " + request.getParameter(name));
+			}
+			view.printCloseTag("ul");
 		}
-		for (String name : request.getHeaderNames()) {
-			response.println("header[" + name + "] = " + request.getHeader(name));
+		if (! request.getHeaderNames().isEmpty()) {
+			view.printTag("p", "Headers are:");
+			view.printOpenTag("ul");
+			for (String name : request.getHeaderNames()) {
+				view.printTag("li", name + " = " + request.getHeader(name));
+			}
+			view.printCloseTag("ul");
 		}
+		if (! request.getCookieNames().isEmpty()) {
+			view.printTag("p", "Cookies are:");
+			view.printOpenTag("ul");
+			for (String name : request.getCookieNames()) {
+				view.printTag("li", name + " = " + request.getCookie(name));
+			}
+			view.printCloseTag("ul");
+		}
+		view.printTail();
 	}
 }

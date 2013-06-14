@@ -18,7 +18,8 @@ public class ExampleMain {
 	public static void main(String[] args) {
 		ToyContainer container = ToyContainer.createInstance(SETTING_NAME);
 		container.addServlet("/", new AdminServlet());
-		container.addServlet("/hello", new HelloServlet());
+		container.addServlet(HelloServlet.PATH, new HelloServlet());
+		container.addServlet(LoginServlet.PATH, new LoginServlet());
 		container.addServlet("/files/.*", new FileServlet());
 		container.start();
 	}
