@@ -7,11 +7,16 @@ import toy.container.ToyContainer;
  */
 public class ExampleMain {
 	/**
+	 * The name of the settings file.
+	 */
+	public static final String SETTING_NAME = "settings";
+
+	/**
 	 * Starts the toy container with example servlets.
 	 * @param args the command line arguments
 	 */
 	public static void main(String[] args) {
-		ToyContainer container = ToyContainer.getInstance();
+		ToyContainer container = ToyContainer.createInstance(SETTING_NAME);
 		container.addServlet("/", new AdminServlet());
 		container.addServlet("/hello", new HelloServlet());
 		container.addServlet("/files/.*", new FileServlet());

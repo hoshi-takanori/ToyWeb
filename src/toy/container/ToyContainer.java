@@ -6,6 +6,7 @@ import java.net.Socket;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 import toy.servlet.Request;
 import toy.servlet.Servlet;
@@ -15,14 +16,14 @@ import toy.servlet.Servlet;
  */
 public class ToyContainer {
 	/**
-	 * The port to listen.
-	 */
-	public static final int PORT = 8080;
-
-	/**
 	 * The singleton instance of the toy container.
 	 */
 	private static ToyContainer container;
+
+	/**
+	 * The port to listen.
+	 */
+	private int port;
 
 	/**
 	 * The map of the path patterns and servlets.
@@ -31,19 +32,31 @@ public class ToyContainer {
 
 	/**
 	 * Returns the singleton instance.
+	 * @param settingName the name of the settings file
 	 * @return the singleton instance
 	 */
-	public static ToyContainer getInstance() {
+	public static ToyContainer createInstance(String settingName) {
 		if (container == null) {
-			container = new ToyContainer();
+			container = new ToyContainer(settingName);
 		}
 		return container;
 	}
 
 	/**
-	 * Constructs a toy container.
+	 * Returns the singleton instance.
+	 * @return the singleton instance
 	 */
-	private ToyContainer() {
+	public static ToyContainer getInstance() {
+		return container;
+	}
+
+	/**
+	 * Constructs a toy container.
+	 * @param settingName the name of the settings file
+	 */
+	private ToyContainer(String settingName) {
+		ResourceBundle settings = ResourceBundle.getBundle(settingName);
+		port = Integer.parseInt(settings.getString("CONTAINER_PORT"));
 		servlets = new LinkedHashMap<String, Servlet>();
 	}
 
@@ -80,11 +93,10 @@ public class ToyContainer {
 
 	/**
 	 * Starts the toy container.
-	 * @param args the command line arguments
 	 */
 	public void start() {
 		try {
-			ServerSocket listener = new ServerSocket(PORT);
+			ServerSocket listener = new ServerSocket(port);
 			while (true) {
 				Socket socket = listener.accept();
 				ToyConnection connection = new ToyConnection(socket);
