@@ -78,10 +78,11 @@ public class FileServlet implements Servlet {
 				response.println(item);
 			}
 		} else if (file.isFile()) {
+			FileInputStream stream = null;
 			try {
 				int size = (int) file.length();
 				byte[] buffer = new byte[size];
-				FileInputStream stream = new FileInputStream(file);
+				stream = new FileInputStream(file);
 				int read = stream.read(buffer);
 				if (read == size) {
 					response.setStatus(Response.STATUS_OK);
@@ -92,6 +93,13 @@ public class FileServlet implements Servlet {
 				}
 			} catch (IOException exception) {
 				response.setError(Response.STATUS_ERROR, exception);
+			} finally {
+				if (stream != null) {
+					try {
+						stream.close();
+					} catch (IOException e) {
+					}
+				}
 			}
 		} else {
 			response.setError(Response.STATUS_ERROR, "no such file or directory");
