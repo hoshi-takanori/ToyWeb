@@ -95,6 +95,9 @@ public class ToyConnection implements Runnable {
 				if (request.getRawParameters() != null) {
 					ToyContainer.getInstance().debugLog("raw params = " + request.getRawParameters());
 				}
+				if (request.getHeader("cookie") != null) {
+					ToyContainer.getInstance().debugLog("cookies = " + request.getHeader("cookie"));
+				}
 				Servlet servlet = ToyContainer.getInstance().findServlet(request);
 				if (servlet == null) {
 					ToyContainer.getInstance().debugLog("servlet = null");

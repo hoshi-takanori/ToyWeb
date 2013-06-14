@@ -75,6 +75,12 @@ public interface Response {
 	public void setHeader(String name, String value);
 
 	/**
+	 * Add a cookie string, for example, "key=value; path=/; expires=..."
+	 * @param cookie the cookie string
+	 */
+	public void addCookie(String cookie);
+
+	/**
 	 * Prints a string to the response body.
 	 * @param str the string to be printed to the response body
 	 */

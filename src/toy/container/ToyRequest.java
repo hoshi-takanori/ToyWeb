@@ -38,6 +38,11 @@ public class ToyRequest implements Request {
 	private Map<String, String> headers;
 
 	/**
+	 * The cookies.
+	 */
+	private Map<String, String> cookies;
+
+	/**
 	 * Constructs a ToyRequest object with the given method and path.
 	 * @param method the method name
 	 * @param path the path
@@ -47,6 +52,7 @@ public class ToyRequest implements Request {
 		this.path = path;
 		params = new HashMap<String, String>();
 		headers = new HashMap<String, String>();
+		cookies = new HashMap<String, String>();
 
 		int index = path.indexOf('?');
 		if (index >= 0) {
@@ -76,6 +82,15 @@ public class ToyRequest implements Request {
 	 */
 	public void setHeader(String name, String value) {
 		headers.put(name.toLowerCase(), value.trim());
+
+		if (name.toLowerCase().equals("cookie")) {
+			for (String cookie : value.trim().split("; *")) {
+				String[] array = cookie.split("=", 2);
+				if (array.length == 2) {
+					cookies.put(array[0], array[1]);
+				}
+			}
+		}
 	}
 
 	/**
@@ -162,5 +177,21 @@ public class ToyRequest implements Request {
 	public int getIntHeader(String name) {
 		String value = getHeader(name);
 		return Integer.parseInt(value);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Set<String> getCookieNames() {
+		return cookies.keySet();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String getCookie(String name) {
+		return cookies.get(name);
 	}
 }

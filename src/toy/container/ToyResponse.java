@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import toy.servlet.Response;
@@ -29,6 +31,11 @@ public class ToyResponse implements Response {
 	private Map<String, String> headers;
 
 	/**
+	 * The cookies to set.
+	 */
+	private List<String> cookies;
+
+	/**
 	 * The response body to be printed.
 	 */
 	private StringBuilder buffer;
@@ -43,6 +50,7 @@ public class ToyResponse implements Response {
 	 */
 	public ToyResponse() {
 		headers = new HashMap<String, String>();
+		cookies = new ArrayList<String>();
 		buffer = new StringBuilder();
 	}
 
@@ -115,6 +123,14 @@ public class ToyResponse implements Response {
 	 * {@inheritDoc}
 	 */
 	@Override
+	public void addCookie(String cookie) {
+		cookies.add(cookie);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public void print(String str) {
 		buffer.append(str);
 	}
@@ -153,6 +169,9 @@ public class ToyResponse implements Response {
 		stream.println("HTTP/1.0 " + status);
 		for (String name : headers.keySet()) {
 			stream.println(name + ": " + headers.get(name));
+		}
+		for (String cookie : cookies) {
+			stream.println("Set-Cookie: " + cookie);
 		}
 		stream.println();
 

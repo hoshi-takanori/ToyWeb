@@ -35,8 +35,8 @@ public interface Request {
 	public String getPath();
 
 	/**
-	 * Returns a set of all parameter names.
-	 * @return a set of all parameter names
+	 * Returns the set of all parameter names.
+	 * @return the set of all parameter names
 	 */
 	public Set<String> getParameterNames();
 
@@ -65,9 +65,9 @@ public interface Request {
 	public int getIntParameter(String name);
 
 	/**
-	 * Returns a set of all header names.
+	 * Returns the set of all header names.
 	 * Note that the header names are converted to lower case.
-	 * @return a set of all header names
+	 * @return the set of all header names
 	 */
 	public Set<String> getHeaderNames();
 
@@ -86,4 +86,17 @@ public interface Request {
 	 * @throws NumberFormatException if the header value can't be converted to an int
 	 */
 	public int getIntHeader(String name);
+
+	/**
+	 * Returns the set of all cookie names.
+	 * @return the set of all cookie names
+	 */
+	public Set<String> getCookieNames();
+
+	/**
+	 * Returns the cookie value specified by name.
+	 * @param name the name to specify the cookie (case sensitive)
+	 * @return the cookie value, or null if there's no cookie specified by name
+	 */
+	public String getCookie(String name);
 }
