@@ -23,6 +23,11 @@ public class ToyRequest implements Request {
 	private String path;
 
 	/**
+	 * The raw parameters.
+	 */
+	private String rawParams;
+
+	/**
 	 * The query parameters.
 	 */
 	private Map<String, String> params;
@@ -55,6 +60,7 @@ public class ToyRequest implements Request {
 	 * @param query the query string
 	 */
 	public void parseParameters(String query) {
+		rawParams = query;
 		for (String param : query.split("&")) {
 			String[] array = param.split("=", 2);
 			if (array.length > 0 && array[0].length() > 0) {
@@ -86,6 +92,13 @@ public class ToyRequest implements Request {
 	@Override
 	public String getPath() {
 		return path;
+	}
+
+	/**
+	 * Returns the raw parameters.
+	 */
+	public String getRawParameters() {
+		return rawParams;
 	}
 
 	/**

@@ -6,6 +6,7 @@ import java.net.Socket;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 import toy.servlet.Request;
@@ -24,6 +25,11 @@ public class ToyContainer {
 	 * The port to listen.
 	 */
 	private int port;
+
+	/**
+	 * The debug mode.
+	 */
+	private boolean debugMode;
 
 	/**
 	 * The map of the path patterns and servlets.
@@ -57,7 +63,22 @@ public class ToyContainer {
 	private ToyContainer(String settingName) {
 		ResourceBundle settings = ResourceBundle.getBundle(settingName);
 		port = Integer.parseInt(settings.getString("CONTAINER_PORT"));
+		try {
+			debugMode = Boolean.parseBoolean(settings.getString("DEBUG_MODE"));
+		} catch (MissingResourceException e) {
+			debugMode = false;
+		}
 		servlets = new LinkedHashMap<String, Servlet>();
+	}
+
+	/**
+	 * Print the log message if the debug mode is true.
+	 * @param message the log message
+	 */
+	public void debugLog(String message) {
+		if (debugMode) {
+			System.out.println(message);
+		}
 	}
 
 	/**
@@ -66,6 +87,7 @@ public class ToyContainer {
 	 * @param servlet the servlet
 	 */
 	public void addServlet(String pattern, Servlet servlet) {
+		debugLog("adding " + servlet.getName() + " (" + pattern + ")");
 		servlets.put(pattern, servlet);
 	}
 
@@ -96,6 +118,7 @@ public class ToyContainer {
 	 */
 	public void start() {
 		try {
+			debugLog("opening port " + port);
 			ServerSocket listener = new ServerSocket(port);
 			while (true) {
 				Socket socket = listener.accept();

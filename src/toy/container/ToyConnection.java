@@ -32,7 +32,7 @@ public class ToyConnection implements Runnable {
 	 * @return the request object
 	 * @throws IOException if an I/O error occurs
 	 */
-	public Request getRequest() throws IOException {
+	public ToyRequest getRequest() throws IOException {
 		BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
 		String line = reader.readLine();
@@ -85,15 +85,22 @@ public class ToyConnection implements Runnable {
 	public void run() {
 		boolean shutdown = false;
 		try {
-			Request request = getRequest();
+			ToyRequest request = getRequest();
 			ToyResponse response = new ToyResponse();
 			if (request == null) {
+				ToyContainer.getInstance().debugLog("request = null");
 				response.setError(Response.STATUS_BAD_REQUEST, "request == null");
 			} else {
+				ToyContainer.getInstance().debugLog("request = " + request.getMethod() + " " + request.getPath());
+				if (request.getRawParameters() != null) {
+					ToyContainer.getInstance().debugLog("raw params = " + request.getRawParameters());
+				}
 				Servlet servlet = ToyContainer.getInstance().findServlet(request);
 				if (servlet == null) {
+					ToyContainer.getInstance().debugLog("servlet = null");
 					response.setError(Response.STATUS_ERROR, "servlet not found");
 				} else {
+					ToyContainer.getInstance().debugLog("servlet = " + servlet.getName());
 					try {
 						servlet.service(request, response);
 					} catch (Exception e) {
@@ -101,6 +108,7 @@ public class ToyConnection implements Runnable {
 					}
 				}
 			}
+			ToyContainer.getInstance().debugLog("response = " + response.getStatus());
 			if (response.getStatus() == null) {
 				response.setError(Response.STATUS_ERROR, "response status == null");
 			} else if (response.getStatus().equals(ToyResponse.STATUS_SHUTDOWN)) {
@@ -108,7 +116,11 @@ public class ToyConnection implements Runnable {
 				response.setStatus(Response.STATUS_OK);
 			}
 			PrintStream stream = new PrintStream(socket.getOutputStream(), false, "UTF-8");
-			response.writeTo(stream, request.getMethod().equals(Request.METHOD_HEAD));
+			if (request != null && request.getMethod().equals(Request.METHOD_HEAD)) {
+				response.writeTo(stream, true);
+			} else {
+				response.writeTo(stream, false);
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
