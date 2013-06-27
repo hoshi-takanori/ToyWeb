@@ -3,11 +3,11 @@ package toy.example;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
-import toy.container.ToyContainer;
-import toy.container.ToyResponse;
 import toy.servlet.Request;
 import toy.servlet.Response;
 import toy.servlet.Servlet;
+import toy.web.ToyEngine;
+import toy.web.ToyResponse;
 
 /**
  * Example servlet for administration.
@@ -57,7 +57,7 @@ public class AdminServlet implements Servlet {
 		} else {
 			view.printTag("p", "Servlets are:");
 			view.printOpenTag("ul");
-			for (Servlet servlet : ToyContainer.getInstance().getServlets()) {
+			for (Servlet servlet : ToyEngine.getInstance().getServlets()) {
 				String path = getServletPath(servlet);
 				if (path != null) {
 					view.printTag("li", view.linkTag(servlet.getName(), path));

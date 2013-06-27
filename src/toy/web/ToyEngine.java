@@ -1,4 +1,4 @@
-package toy.container;
+package toy.web;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -13,13 +13,13 @@ import toy.servlet.Request;
 import toy.servlet.Servlet;
 
 /**
- * Extremely simple servlet container.
+ * Extremely simple servlet engine.
  */
-public class ToyContainer {
+public class ToyEngine {
 	/**
-	 * The singleton instance of the toy container.
+	 * The singleton instance of the toy engine.
 	 */
-	private static ToyContainer container;
+	private static ToyEngine engine;
 
 	/**
 	 * The port to listen.
@@ -41,30 +41,30 @@ public class ToyContainer {
 	 * @param settingName the name of the settings file
 	 * @return the singleton instance
 	 */
-	public static ToyContainer createInstance(String settingName) {
-		if (container == null) {
-			container = new ToyContainer(settingName);
+	public static ToyEngine createInstance(String settingName) {
+		if (engine == null) {
+			engine = new ToyEngine(settingName);
 		}
-		return container;
+		return engine;
 	}
 
 	/**
 	 * Returns the singleton instance.
 	 * @return the singleton instance
 	 */
-	public static ToyContainer getInstance() {
-		return container;
+	public static ToyEngine getInstance() {
+		return engine;
 	}
 
 	/**
-	 * Constructs a toy container.
+	 * Constructs a toy engine.
 	 * @param settingName the name of the settings file
 	 */
-	private ToyContainer(String settingName) {
+	private ToyEngine(String settingName) {
 		ResourceBundle settings = ResourceBundle.getBundle(settingName);
-		port = Integer.parseInt(settings.getString("CONTAINER_PORT"));
+		port = Integer.parseInt(settings.getString("PORT"));
 		try {
-			debugMode = Boolean.parseBoolean(settings.getString("DEBUG_MODE"));
+			debugMode = Boolean.parseBoolean(settings.getString("DEBUG"));
 		} catch (MissingResourceException e) {
 			debugMode = false;
 		}
@@ -114,7 +114,7 @@ public class ToyContainer {
 	}
 
 	/**
-	 * Starts the toy container.
+	 * Starts the toy engine.
 	 */
 	public void start() {
 		try {

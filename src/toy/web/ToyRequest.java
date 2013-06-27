@@ -1,4 +1,4 @@
-package toy.container;
+package toy.web;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -9,7 +9,7 @@ import java.util.Set;
 import toy.servlet.Request;
 
 /**
- * Subclass of Request to be used with ToyContainer.
+ * Subclass of Request to be used with ToyEngine.
  */
 public class ToyRequest implements Request {
 	/**

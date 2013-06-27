@@ -1,4 +1,4 @@
-package toy.container;
+package toy.web;
 
 import java.io.IOException;
 import java.io.PrintStream;
@@ -12,11 +12,11 @@ import java.util.Map;
 import toy.servlet.Response;
 
 /**
- * Subclass of Response to be used with ToyContainer.
+ * Subclass of Response to be used with ToyEngine.
  */
 public class ToyResponse implements Response {
 	/**
-	 * The special status code to shutdown the servlet container.
+	 * The special status code to shutdown the servlet engine.
 	 */
 	public static final String STATUS_SHUTDOWN = "XXX Shutdown";
 

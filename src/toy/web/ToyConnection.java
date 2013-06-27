@@ -1,4 +1,4 @@
-package toy.container;
+package toy.web;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,7 +11,7 @@ import toy.servlet.Response;
 import toy.servlet.Servlet;
 
 /**
- * Processes the connection for ToyContainer.
+ * Processes the connection for ToyEngine.
  */
 public class ToyConnection implements Runnable {
 	/**
@@ -88,22 +88,22 @@ public class ToyConnection implements Runnable {
 			ToyRequest request = getRequest();
 			ToyResponse response = new ToyResponse();
 			if (request == null) {
-				ToyContainer.getInstance().debugLog("request = null");
+				ToyEngine.getInstance().debugLog("request = null");
 				response.setError(Response.STATUS_BAD_REQUEST, "request == null");
 			} else {
-				ToyContainer.getInstance().debugLog("request = " + request.getMethod() + " " + request.getPath());
+				ToyEngine.getInstance().debugLog("request = " + request.getMethod() + " " + request.getPath());
 				if (request.getRawParameters() != null) {
-					ToyContainer.getInstance().debugLog("raw params = " + request.getRawParameters());
+					ToyEngine.getInstance().debugLog("raw params = " + request.getRawParameters());
 				}
 				if (request.getHeader("cookie") != null) {
-					ToyContainer.getInstance().debugLog("cookies = " + request.getHeader("cookie"));
+					ToyEngine.getInstance().debugLog("cookies = " + request.getHeader("cookie"));
 				}
-				Servlet servlet = ToyContainer.getInstance().findServlet(request);
+				Servlet servlet = ToyEngine.getInstance().findServlet(request);
 				if (servlet == null) {
-					ToyContainer.getInstance().debugLog("servlet = null");
+					ToyEngine.getInstance().debugLog("servlet = null");
 					response.setError(Response.STATUS_ERROR, "servlet not found");
 				} else {
-					ToyContainer.getInstance().debugLog("servlet = " + servlet.getName());
+					ToyEngine.getInstance().debugLog("servlet = " + servlet.getName());
 					try {
 						servlet.service(request, response);
 					} catch (Exception e) {
@@ -111,7 +111,7 @@ public class ToyConnection implements Runnable {
 					}
 				}
 			}
-			ToyContainer.getInstance().debugLog("response = " + response.getStatus());
+			ToyEngine.getInstance().debugLog("response = " + response.getStatus());
 			if (response.getStatus() == null) {
 				response.setError(Response.STATUS_ERROR, "response status == null");
 			} else if (response.getStatus().equals(ToyResponse.STATUS_SHUTDOWN)) {
