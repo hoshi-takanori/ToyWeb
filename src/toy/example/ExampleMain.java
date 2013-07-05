@@ -1,5 +1,7 @@
 package toy.example;
 
+import java.util.ResourceBundle;
+
 import toy.web.ToyEngine;
 
 /**
@@ -16,7 +18,8 @@ public class ExampleMain {
 	 * @param args the command line arguments
 	 */
 	public static void main(String[] args) {
-		ToyEngine engine = ToyEngine.createInstance(SETTING_NAME);
+		ResourceBundle settings = ResourceBundle.getBundle(SETTING_NAME);
+		ToyEngine engine = ToyEngine.createInstance(settings);
 		engine.addServlet("/", new AdminServlet());
 		engine.addServlet(HelloServlet.PATH, new HelloServlet());
 		engine.addServlet(LoginServlet.PATH, new LoginServlet());

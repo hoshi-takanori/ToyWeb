@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.MissingResourceException;
+import java.util.Observable;
 import java.util.ResourceBundle;
 
 import toy.servlet.Request;
@@ -15,7 +16,7 @@ import toy.servlet.Servlet;
 /**
  * Extremely simple servlet engine.
  */
-public class ToyEngine {
+public class ToyEngine extends Observable {
 	/**
 	 * The singleton instance of the toy engine.
 	 */
@@ -38,12 +39,12 @@ public class ToyEngine {
 
 	/**
 	 * Returns the singleton instance.
-	 * @param settingName the name of the settings file
+	 * @param settings the settings
 	 * @return the singleton instance
 	 */
-	public static ToyEngine createInstance(String settingName) {
+	public static ToyEngine createInstance(ResourceBundle settings) {
 		if (engine == null) {
-			engine = new ToyEngine(settingName);
+			engine = new ToyEngine(settings);
 		}
 		return engine;
 	}
@@ -58,10 +59,9 @@ public class ToyEngine {
 
 	/**
 	 * Constructs a toy engine.
-	 * @param settingName the name of the settings file
+	 * @param settings the settings
 	 */
-	private ToyEngine(String settingName) {
-		ResourceBundle settings = ResourceBundle.getBundle(settingName);
+	private ToyEngine(ResourceBundle settings) {
 		port = Integer.parseInt(settings.getString("PORT"));
 		try {
 			debugMode = Boolean.parseBoolean(settings.getString("DEBUG"));
@@ -111,6 +111,19 @@ public class ToyEngine {
 			}
 		}
 		return null;
+	}
+
+	/**
+	 * Notifies the observers.
+	 * @param request the request
+	 * @param response the response
+	 * @param servlet the servlet
+	 */
+	public void notifyTransaction(ToyRequest request, ToyResponse response, Servlet servlet) {
+		if (countObservers() > 0) {
+			setChanged();
+			notifyObservers(new ToyTransaction(request, response, servlet));
+		}
 	}
 
 	/**

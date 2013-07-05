@@ -63,6 +63,23 @@ public class ToyResponse implements Response {
 	}
 
 	/**
+	 * Returns the header value specified by name.
+	 * @param name the name to specify the header (case sensitive)
+	 * @return the header value, or null if there's no header specified by name
+	 */
+	public String getHeader(String name) {
+		return headers.get(name);
+	}
+
+	/**
+	 * Returns the cookies.
+	 * @return the cookies
+	 */
+	public List<String> getCookies() {
+		return cookies;
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	@Override

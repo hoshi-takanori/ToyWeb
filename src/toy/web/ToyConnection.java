@@ -101,7 +101,7 @@ public class ToyConnection implements Runnable {
 				Servlet servlet = ToyEngine.getInstance().findServlet(request);
 				if (servlet == null) {
 					ToyEngine.getInstance().debugLog("servlet = null");
-					response.setError(Response.STATUS_ERROR, "servlet not found");
+					response.setError(Response.STATUS_NOT_FOUND, "servlet not found");
 				} else {
 					ToyEngine.getInstance().debugLog("servlet = " + servlet.getName());
 					try {
@@ -110,6 +110,7 @@ public class ToyConnection implements Runnable {
 						response.setError(Response.STATUS_ERROR, e);
 					}
 				}
+				ToyEngine.getInstance().notifyTransaction(request, response, servlet);
 			}
 			ToyEngine.getInstance().debugLog("response = " + response.getStatus());
 			if (response.getStatus() == null) {
